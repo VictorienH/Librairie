@@ -6,16 +6,25 @@ import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import jakarta.persistence.Table;
+import lombok.AllArgsConstructor;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
+import lombok.Setter;
 
 @Entity
 @Table(name = "Livre")
+@Getter
+@Setter
+@NoArgsConstructor
+@AllArgsConstructor
+
 public class Livre {
     
     @Id
     @Column(name = "id_livre")
     @GeneratedValue(strategy = GenerationType.IDENTITY)
 
-    private Long id;
+    private Long id_livre;
 
     @Column(name = "title")
     private String title;
@@ -36,68 +45,7 @@ public class Livre {
     private String couverture;
 
 
-    public Livre(){
-
-    }
-
-    public Livre(long id, String title, String auteur, String anneePublication, String isbn, String couverture) {
-        super();
-        this.id = id;
-        this.title = title;
-        this.auteur = auteur;
-        this.anneePublication = anneePublication;
-        this.isbn = isbn;
-        this.couverture = couverture;
-    }
-
-    public long getId() {
-        return id;
-    }
-
-    public void setId(long id) {
-        this.id = id;
-    }
-
-    public String getTitle() {
-        return title;
-    }
-
-    public void setTitle(String title) {
-        this.title = title;
-    }
-
-    public String getAuteur() {
-        return auteur;
-    }
-
-    public void setAuteur(String auteur) {
-        this.auteur = auteur;
-    }
-
-    public String getAnneePublication() {
-        return anneePublication;
-    }
-
-    public void setAnneePublication(String anneePublication) {
-        this.anneePublication = anneePublication;
-    }
-
-    public String getIsbn() {
-        return isbn;
-    }
-
-    public void setIsbn(String isbn) {
-        this.isbn = isbn;
-    }
-
-    public String getCouverture() {
-        return couverture;
-    }
-
-    public void setCouverture(String couverture) {
-        this.couverture = couverture;
-    }
-
+ 
 
 
 }

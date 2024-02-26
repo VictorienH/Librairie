@@ -13,43 +13,18 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RestController;
 
 import projet.librairie.models.Livre;
-import projet.librairie.service.LibrairieService;
+import projet.librairie.repository.LibrairieRepository;
 
 @CrossOrigin(origins = "*")
 @RestController
 public class LibrairieController {
 
     @Autowired
-    private LibrairieService librairieService;
+    private LibrairieRepository repository;
     
     @GetMapping("/livres")
     public List<Livre> getAllLivres(){
-        
-        return librairieService.getLivres();
-    }
-    
-    @GetMapping("/livre/{id}")
-
-    public Livre getByIdLivre(@PathVariable long id){
-        return librairieService.getLivre(id);
-    }
-
-    @DeleteMapping("/livre/{id}")
-    public void deleteLivre(@PathVariable long id){
-        librairieService.deleteLivre(id);
-    }
-
-    @PostMapping("/livres")
-    public void addLivre(@RequestBody Livre livre){
-        librairieService.addLivre(livre);
-    }
-
-
-    @PutMapping("/livre/{id}")
-
-    public void updateLivre(@RequestBody Livre livre, @PathVariable long id){
-        librairieService.updateLivre(livre, id);
+        return repository.findAll();
     }
     
 }
-
