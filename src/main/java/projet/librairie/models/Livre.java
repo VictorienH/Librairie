@@ -1,47 +1,41 @@
 package projet.librairie.models;
 
+import java.util.Date;
+
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
-import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
-import jakarta.persistence.Table;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 
-@Entity
-@Table(name = "Livre")
 @Getter
 @Setter
 @NoArgsConstructor
 @AllArgsConstructor
-
+@Entity(name = "livre")
 public class Livre {
     
     @Id
+    @GeneratedValue
     @Column(name = "id_livre")
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    private Long idLivre;
 
-    private Long id_livre;
-
-    @Column(name = "title")
-    private String title;
+    @Column(name = "titre")
+    private String titre;
 
     @Column(name = "auteur")
     private String auteur;
 
     @Column(name = "annee_publication")
-
-    private String anneePublication;
+    private Date anneePublication;
 
     @Column(name = "isbn")
-
     private String isbn;
 
     @Column(name = "couverture")
-
     private String couverture;
 
 
