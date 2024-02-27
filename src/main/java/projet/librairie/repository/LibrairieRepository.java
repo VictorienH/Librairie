@@ -6,5 +6,6 @@ import projet.librairie.models.Livre;
 
 public interface LibrairieRepository extends JpaRepository<Livre, Long>{
     
+    
 
 }
