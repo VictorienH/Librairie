@@ -21,7 +21,4 @@ public class LibrairieController {
     public Iterable<Livre> getAllLivres(){
         return repository.findAll();
     }
-
-
-    
 }
