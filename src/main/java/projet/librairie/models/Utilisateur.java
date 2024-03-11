@@ -12,6 +12,8 @@ import jakarta.persistence.Id;
 import jakarta.persistence.JoinColumn;
 import jakarta.persistence.JoinTable;
 import jakarta.persistence.ManyToMany;
+import jakarta.persistence.ManyToOne;
+import jakarta.persistence.OneToMany;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -21,12 +23,12 @@ import lombok.Setter;
 @Setter
 @NoArgsConstructor
 @AllArgsConstructor
-@Entity(name = "user")
+@Entity(name = "utilisateur")
 public class Utilisateur {
     
     @Id
     @GeneratedValue
-    @Column(name = "id_utilisateur")
+    @Column(name = "id")
     private Long id;
 
     @Column(name = "name")
@@ -40,10 +42,14 @@ public class Utilisateur {
 
     @ManyToMany(cascade = {CascadeType.ALL})
     @JoinTable(
-        name = "utilisateur_livre",
-        joinColumns = {@JoinColumn(name = "id_utilisateur")},
+        name = "listlivres",
+        joinColumns = {@JoinColumn(name = "id")},
         inverseJoinColumns = {@JoinColumn(name = "id_livre")}
     )
     private Set<Livre> livres = new HashSet <>();
 
+    @OneToMany(mappedBy = "utilisateur", cascade = CascadeType.ALL)
+    private Set<Commentaire> commentaires = new HashSet<>();
+
 }
+

@@ -2,8 +2,10 @@ package projet.librairie.models;
 
 
 import jakarta.persistence.Column;
+import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.Id;
+import jakarta.persistence.ManyToOne;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -13,6 +15,7 @@ import lombok.Setter;
 @Setter
 @NoArgsConstructor
 @AllArgsConstructor
+@Entity(name = "commentaire")
 public class Commentaire {
      
     @Id
@@ -22,5 +25,11 @@ public class Commentaire {
 
     @Column(name = "commentaire")
     private String commentaire;
+
+    @ManyToOne
+    private Utilisateur utilisateur;
+
+    @ManyToOne
+    private Livre livres;
     
 }
