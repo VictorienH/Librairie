@@ -52,5 +52,23 @@ public class LivreService {
         
     }
 
+    public ResponseEntity<String> getLivresByCategorie(String categorie) {
+        UriComponentsBuilder builder = UriComponentsBuilder.fromHttpUrl(OPEN_LIBRARY_URL)
+                .queryParam("q", "subject:" + categorie);
+
+        String url = builder.toUriString();
+        
+        return restTemplate.exchange(
+                url,
+                HttpMethod.GET,
+                null,
+                String.class
+        );
+        
+    }
+
+
+    
+
     
 }

@@ -33,5 +33,12 @@ public class LivreController {
         return livreService.getLivresByAuthor(author);
     }
 
+    @GetMapping("/categories/{categorie}")
+    public ResponseEntity<String> getLivreByCategorie(@PathVariable String categorie ) {
+        return livreService.getLivresByCategorie(categorie);
+    }  
+
+    
+
     
 }
