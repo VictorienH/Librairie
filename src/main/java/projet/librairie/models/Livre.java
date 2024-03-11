@@ -46,7 +46,7 @@ public class Livre {
     @ManyToMany(mappedBy = "livres")
     private Set<Utilisateur> utilisateurs = new HashSet<>();
 
-    @OneToMany(mappedBy = "livres")
+    @OneToMany(mappedBy = "livres", cascade = CascadeType.ALL)
     private Set<Commentaire> commentaires = new HashSet<>();
 
 }
