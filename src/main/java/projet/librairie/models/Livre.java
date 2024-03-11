@@ -1,11 +1,16 @@
 package projet.librairie.models;
 
 import java.util.Date;
+import java.util.HashSet;
+import java.util.Set;
 
+import jakarta.persistence.CascadeType;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.Id;
+import jakarta.persistence.ManyToMany;
+import jakarta.persistence.OneToMany;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -38,8 +43,10 @@ public class Livre {
     @Column(name = "couverture")
     private String couverture;
 
+    @ManyToMany(mappedBy = "livres")
+    private Set<Utilisateur> utilisateurs = new HashSet<>();
 
- 
-
+    @OneToMany(mappedBy = "livres")
+    private Set<Commentaire> commentaires = new HashSet<>();
 
 }
