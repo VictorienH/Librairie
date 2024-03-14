@@ -33,9 +33,102 @@ public class LivreController {
 
     @GetMapping("/books/{title}")
 public ResponseEntity<String> getLivresByName(@PathVariable String title) {
-    String jsonResponse = livreService.getLivresByName(title).getBody(); // Obtenez la réponse JSON de votre service
+    String jsonResponse = livreService.getLivresByName(title).getBody();
 
-    // Mapper JSON
+    ObjectMapper mapper = new ObjectMapper();
+
+    try {
+        JsonNode rootNode = mapper.readTree(jsonResponse);
+        JsonNode itemsNode = rootNode.path("items");
+
+        if (itemsNode.isArray() && itemsNode.size() > 0) {
+            List<JsonNode> filteredBooks = new ArrayList<>();
+            for (JsonNode bookNode : itemsNode) {
+                String bookTitle = bookNode.path("volumeInfo").path("title").asText();
+                String bookAuthor = bookNode.path("volumeInfo").path("authors").get(0).asText();
+                String publishedDate = bookNode.path("volumeInfo").path("publishedDate").asText();
+                String description = bookNode.path("volumeInfo").path("description").asText();
+                String language = bookNode.path("volumeInfo").path("language").asText();
+
+
+
+                String photoUrl = null;
+                if (bookNode.path("volumeInfo").has("imageLinks")) {
+                    photoUrl = bookNode.path("volumeInfo").path("imageLinks").path("thumbnail").asText();
+                }
+                JsonNode filteredBook = mapper.createObjectNode()
+                        .put("title", bookTitle)
+                        .put("author", bookAuthor)
+                        .put("publishedDate", publishedDate)
+                        .put("description", description)
+                        .put("language", language)
+                        .put("photoUrl", photoUrl);
+                        
+
+                filteredBooks.add(filteredBook);
+            }
+
+            return ResponseEntity.ok(mapper.writeValueAsString(filteredBooks));
+        } else {
+            return ResponseEntity.notFound().build();
+        }
+    } catch (Exception e) {
+        e.printStackTrace();
+        return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("Erreur lors de la récupération des données.");
+    }
+}
+
+
+@GetMapping("/auteur/{author}")
+public ResponseEntity<String> getLivresByAuthor(@PathVariable String author) {
+    String jsonResponse = livreService.getLivresByAuthor(author).getBody();
+
+    ObjectMapper mapper = new ObjectMapper();
+
+    try {
+        JsonNode rootNode = mapper.readTree(jsonResponse);
+        JsonNode itemsNode = rootNode.path("items");
+
+        if (itemsNode.isArray() && itemsNode.size() > 0) {
+            List<JsonNode> filteredBooks = new ArrayList<>();
+            for (JsonNode bookNode : itemsNode) {
+                String bookTitle = bookNode.path("volumeInfo").path("title").asText();
+                String bookAuthor = bookNode.path("volumeInfo").path("authors").get(0).asText();
+                String publishedDate = bookNode.path("volumeInfo").path("publishedDate").asText();
+                String description = bookNode.path("volumeInfo").path("description").asText();
+
+                String photoUrl = null;
+                if (bookNode.path("volumeInfo").has("imageLinks")) {
+                    photoUrl = bookNode.path("volumeInfo").path("imageLinks").path("thumbnail").asText();
+                }
+
+                if (bookAuthor.equalsIgnoreCase(author)) {
+                    JsonNode filteredBook = mapper.createObjectNode()
+                            .put("title", bookTitle)
+                            .put("author", bookAuthor)
+                            .put("publishedDate", publishedDate)
+                            .put("description", description)
+                            .put("photoUrl", photoUrl);
+
+                    filteredBooks.add(filteredBook);
+                }
+            }
+
+            return ResponseEntity.ok(mapper.writeValueAsString(filteredBooks));
+        } else {
+            return ResponseEntity.notFound().build();
+        }
+    } catch (Exception e) {
+        e.printStackTrace();
+        return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("Erreur lors de la récupération des données.");
+    }
+}
+
+
+@GetMapping("/categories/{categorie}")
+public ResponseEntity<String> getLivreByCategorie(@PathVariable String categorie) {
+    String jsonResponse = livreService.getLivresByCategorie(categorie).getBody();
+
     ObjectMapper mapper = new ObjectMapper();
 
     try {
@@ -47,28 +140,39 @@ public ResponseEntity<String> getLivresByName(@PathVariable String title) {
             for (JsonNode bookNode : itemsNode) {
                 // Récupérer les informations requises pour chaque livre
                 String bookTitle = bookNode.path("volumeInfo").path("title").asText();
-                String bookAuthor = bookNode.path("volumeInfo").path("authors").get(0).asText(); // Prendre le premier auteur
+                String bookAuthor = bookNode.path("volumeInfo").path("authors").get(0).asText();
                 String publishedDate = bookNode.path("volumeInfo").path("publishedDate").asText();
+                String description = bookNode.path("volumeInfo").path("description").asText();
+                String categories = bookNode.path("volumeInfo").path("categories").asText();
 
-                // Récupérer l'URL de la photo de couverture du livre
+
                 String photoUrl = null;
                 if (bookNode.path("volumeInfo").has("imageLinks")) {
                     photoUrl = bookNode.path("volumeInfo").path("imageLinks").path("thumbnail").asText();
                 }
 
-                // Créer un objet JSON contenant les informations filtrées pour chaque livre
-                JsonNode filteredBook = mapper.createObjectNode()
-                        .put("title", bookTitle)
-                        .put("author", bookAuthor)
-                        .put("publishedDate", publishedDate)
-                        .put("photoUrl", photoUrl);
+                if (bookNode.path("volumeInfo").has("categories")) {
+                    JsonNode categoriesNode = bookNode.path("volumeInfo").path("categories");
+                    for (JsonNode categoryNode : categoriesNode) {
+                        if (categoryNode.asText().equalsIgnoreCase(categorie)) {
+                            JsonNode filteredBook = mapper.createObjectNode()
+                                    .put("title", bookTitle)
+                                    .put("author", bookAuthor)
+                                    .put("categories", categories)
+                                    .put("publishedDate", publishedDate)
+                                    .put("description", description)
+                                    .put("photoUrl", photoUrl);
 
-                filteredBooks.add(filteredBook);
+                            filteredBooks.add(filteredBook);
+                            break;
+                        }
+                    }
+                }   
             }
 
             return ResponseEntity.ok(mapper.writeValueAsString(filteredBooks));
         } else {
-            return ResponseEntity.notFound().build(); // Aucun livre trouvé avec le titre donné
+            return ResponseEntity.notFound().build();
         }
     } catch (Exception e) {
         e.printStackTrace();
@@ -76,18 +180,4 @@ public ResponseEntity<String> getLivresByName(@PathVariable String title) {
     }
 }
 
-
-    @GetMapping("/auteur/{author}")
-    public ResponseEntity<String> getLivreByAuthor(@PathVariable String author ) {
-        return livreService.getLivresByAuthor(author);
-    }
-
-    @GetMapping("/categories/{categorie}")
-    public ResponseEntity<String> getLivreByCategorie(@PathVariable String categorie ) {
-        return livreService.getLivresByCategorie(categorie);
-    }  
-
-    
-
-    
 }
