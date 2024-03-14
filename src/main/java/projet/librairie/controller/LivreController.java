@@ -47,16 +47,14 @@ public ResponseEntity<String> getLivresByName(@PathVariable String title) {
             for (JsonNode bookNode : itemsNode) {
                 // Récupérer les informations requises pour chaque livre
                 String bookTitle = bookNode.path("volumeInfo").path("title").asText();
-                String bookAuthor = bookNode.path("volumeInfo").path("authors").get(0).asText(); // Prendre le premier auteur
+                String bookAuthor = bookNode.path("volumeInfo").path("authors").get(0).asText(); 
                 String publishedDate = bookNode.path("volumeInfo").path("publishedDate").asText();
 
-                // Récupérer l'URL de la photo de couverture du livre
                 String photoUrl = null;
                 if (bookNode.path("volumeInfo").has("imageLinks")) {
                     photoUrl = bookNode.path("volumeInfo").path("imageLinks").path("thumbnail").asText();
                 }
 
-                // Créer un objet JSON contenant les informations filtrées pour chaque livre
                 JsonNode filteredBook = mapper.createObjectNode()
                         .put("title", bookTitle)
                         .put("author", bookAuthor)
