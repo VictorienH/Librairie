@@ -13,7 +13,7 @@ public class LivreService {
     private final String OPEN_LIBRARY_URL = "https://www.googleapis.com/books/v1/volumes";
     private final String LANGUAGE_FILTER = "en";
 
-    @Autowired
+    @Autowired  
     private RestTemplate restTemplate;
 
     public ResponseEntity<String> getAllLivres() {
@@ -29,7 +29,7 @@ public class LivreService {
         UriComponentsBuilder builder = UriComponentsBuilder.fromHttpUrl(OPEN_LIBRARY_URL)
                 .queryParam("q", "intitle:" + title)
                 .queryParam("maxResults", 40)
-                .queryParam("langRestrict", LANGUAGE_FILTER);                ;
+                .queryParam("langRestrict", LANGUAGE_FILTER);
 
         String url = builder.toUriString();
         return restTemplate.exchange(
