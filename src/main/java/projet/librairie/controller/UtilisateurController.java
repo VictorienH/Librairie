@@ -23,7 +23,6 @@ public class UtilisateurController {
         this.userRepo = userRepo;
     }
 
-
     @GetMapping("/allUserss")
     public List<Utilisateur> getUsers() {
         return userRepo.findAll();
